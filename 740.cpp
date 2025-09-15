@@ -1,14 +1,3 @@
-/*****************************************
- * (This comment block is added by the Judge System)
- * Submission ID: 321655
- * Submitted at:  2025-09-15 02:09:30
- *
- * User ID:       2811
- * Username:      59270829
- * Problem ID:    740
- * Problem Name:  Manipulate List
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 typedef long long ll;

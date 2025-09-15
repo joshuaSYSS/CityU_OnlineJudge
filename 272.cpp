@@ -1,14 +1,3 @@
-/*****************************************
- * (This comment block is added by the Judge System)
- * Submission ID: 321642
- * Submitted at:  2025-09-15 00:54:53
- *
- * User ID:       2811
- * Username:      59270829
- * Problem ID:    272
- * Problem Name:  Convex Hull
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 typedef long double ld;

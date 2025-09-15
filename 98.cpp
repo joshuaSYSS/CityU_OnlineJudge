@@ -1,14 +1,3 @@
-/*****************************************
- * (This comment block is added by the Judge System)
- * Submission ID: 321653
- * Submitted at:  2025-09-15 01:58:29
- *
- * User ID:       2811
- * Username:      59270829
- * Problem ID:    98
- * Problem Name:  Trees
- */
-
 #include <bits/stdc++.h>
 using namespace std;
 int n, m, a, b, i, res, p1, p2, tc = 1;
