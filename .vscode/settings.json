@@ -8,6 +8,7 @@
         "initializer_list": "cpp",
         "xstring": "cpp",
         "xutility": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "stdexcept": "cpp"
     }
 }
