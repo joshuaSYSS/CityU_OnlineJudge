@@ -43,26 +43,26 @@ ll isPerf(ll n) {
     return a * a == n;
 }
 int main(void){
-std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
-vl ans(201);
-for(ll r = 1; r <= 200; ++r) {
-    ll res = 0;
-    for (ll i = -r; i <= r; ++i) {
-        for (ll j = -r; j <= r; ++j) {
-            for (ll k = -r; k <= r; ++k) {
-                ll d = i * i + j * j + k * k;
-                if (d < r * r &&
-                    isPerf(d)) {
-                    ++res;
+    std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
+    vl ans(201);
+    for(ll r = 1; r <= 200; ++r) {
+        ll res = 0;
+        for (ll i = -r; i <= r; ++i) {
+            for (ll j = -r; j <= r; ++j) {
+                for (ll k = -r; k <= r; ++k) {
+                    ll d = i * i + j * j + k * k;
+                    if (d < r * r &&
+                        isPerf(d)) {
+                        ++res;
+                    }
                 }
             }
         }
+        ans[r] = res;
     }
-    ans[r] = res;
-}
-ll r;
-while (cin >> r) {
-    cout << ans[r] << '\n';
-}
-return 0;
+    ll r;
+    while (cin >> r) {
+        cout << ans[r] << '\n';
+    }
+    return 0;
 }

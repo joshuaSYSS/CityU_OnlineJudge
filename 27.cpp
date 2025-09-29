@@ -49,15 +49,15 @@ ll dfs(ll i) {
     return dfs(node) + 1;
 }
 int main(void){
-std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
-tcin{
-    cin >> a >> b >> c >> n;
-ll res = 0;
-up(0, n, 1) {
-    visited = vl(n, 0);
-    res = max(res, dfs(i));
-}
-cout << res << '\n';
-}
-return 0;
+    std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
+    tcin{
+        cin >> a >> b >> c >> n;
+    ll res = 0;
+    up(0, n, 1) {
+        visited = vl(n, 0);
+        res = max(res, dfs(i));
+    }
+    cout << res << '\n';
+    }
+    return 0;
 }

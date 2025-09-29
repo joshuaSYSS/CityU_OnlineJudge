@@ -40,31 +40,31 @@ typedef queue<pair<ll, ll>> qpll;
 #define LL_MIN (LL_MAX + 1)
 
 int main(void){
-std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
-ll n, m, k;
-while (cin >> n >> m >> k) {
-    if (n == 0 && m == 0 && k == 0) break;
-    vl dp(n * m + 1, 0);
-    dp[0] = 1;
-    for (ll i = 0; i < n; i++) {
-        for (ll j = n * m; j >= i; j--) {
-            for (ll p = 1; p <= m && j + p <= n * m; p++) {
-                dp[j + p] += dp[j];
+    std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
+    ll n, m, k;
+    while (cin >> n >> m >> k) {
+        if (n == 0 && m == 0 && k == 0) break;
+        vl dp(n * m + 1, 0);
+        dp[0] = 1;
+        for (ll i = 0; i < n; i++) {
+            for (ll j = n * m; j >= i; j--) {
+                for (ll p = 1; p <= m && j + p <= n * m; p++) {
+                    dp[j + p] += dp[j];
+                }
+                dp[j] = 0;
             }
-            dp[j] = 0;
         }
+        ld pw = 1;
+        for (ll i = 0; i < n; i++) pw *= m;
+        ld res = 0;
+        for (ll i = n; i <= k; i++) {
+            res += (ld)dp[i] / pw;
+        }
+        for (ll i = k + 1; i <= n * m; i++) {
+            res += (ld)dp[i] / pw * (ld)(i - k);
+        }
+        cout << fixed << setprecision(10);
+        cout << res << '\n';
     }
-    ld pw = 1;
-    for (ll i = 0; i < n; i++) pw *= m;
-    ld res = 0;
-    for (ll i = n; i <= k; i++) {
-        res += (ld)dp[i] / pw;
-    }
-    for (ll i = k + 1; i <= n * m; i++) {
-        res += (ld)dp[i] / pw * (ld)(i - k);
-    }
-    cout << fixed << setprecision(10);
-    cout << res << '\n';
-}
-return 0;
+    return 0;
 }
