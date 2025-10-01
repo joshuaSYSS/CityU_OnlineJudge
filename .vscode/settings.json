@@ -9,6 +9,7 @@
         "xstring": "cpp",
         "xutility": "cpp",
         "algorithm": "cpp",
-        "stdexcept": "cpp"
+        "stdexcept": "cpp",
+        "random": "cpp"
     }
 }
