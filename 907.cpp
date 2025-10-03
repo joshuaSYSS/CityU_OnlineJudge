@@ -1,6 +1,3 @@
-/*
-TLE. Incorrect solution
-*/
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long; using ld = long double;
@@ -43,41 +40,37 @@ typedef queue<pair<ll, ll>> qpll;
 #define LL_MIN (LL_MAX + 1)
 
 int main(void){
-    std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
-    ll n, m, tc = 1;
-while (cin >> n >> m) {
-    if (n == 0 && m == 0) break;
-    cout << "Case " << tc++ << ": ";
-    vl v(n);
-    up(0, n, 1) cin >> v[i];
-    vl ls;
-    up(0, n, 1) {
-        up2(0, n, 1) {
-            ls.push_back(v[i] + v[j]);
-        }
+std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
+tcin{
+    ll n; cin >> n;
+vl v(n);
+up(0, n, 1) cin >> v[i];
+stack<ll> s;
+vpll arr(n);
+s.push(-1);
+up(0, n, 1) {
+    while (s.top() != -1 &&
+        v[s.top()] >= v[i]) {
+        s.pop();
     }
-    sort(all(ls));
-    ls.erase(unique(all(ls)), ls.end());
-    ll res = 0;
-    up(0, n, 1) {
-        res = max(res, v[i]);
-    }
-    res = max(res, ls[ls.size() - 1]);
-    up(0, n, 1) {
-        auto g = upper_bound(all(ls), m - v[i]);
-        if (g != ls.begin()) {
-            --g;
-            res = max(res, *g + v[i]);
-        }
-        up2(0, n, 1) {
-            auto f = upper_bound(all(ls), m - (v[i] + v[j]));
-            if (f == ls.begin()) continue;
-            --f;
-            res = max(res, *f + v[i] + v[j]);
-        }
-    }
-    cout << res << '\n';
-    cout << '\n';
+    arr[i].first = s.top();
+    s.push(i);
 }
-    return 0;
+while (!s.empty()) s.pop();
+s.push(n);
+down(n, 0, 1) {
+    while (s.top() != n &&
+        v[s.top()] >= v[i]) {
+        s.pop();
+    }
+    arr[i].second = s.top();
+    s.push(i);
+}
+ll res = 0;
+up(0, n, 1) {
+    res = max(res, (arr[i].second - arr[i].first - 1) * v[i]);
+}
+cout << res << '\n';
+}
+return 0;
 }

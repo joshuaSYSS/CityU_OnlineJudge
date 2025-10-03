@@ -10,6 +10,8 @@
         "xutility": "cpp",
         "algorithm": "cpp",
         "stdexcept": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "tuple": "cpp",
+        "utility": "cpp"
     }
 }

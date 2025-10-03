@@ -38,6 +38,11 @@ typedef queue<pair<ll, ll>> qpll;
 
 #define LL_MAX 9223372036854775807
 #define LL_MIN (LL_MAX + 1)
+const ld PHI = (1 + sqrt(5)) / 2;
+const ll Mod = 998244353ll;
+const ll Mod2 = 1000000007ll; //10^9 + 7
+const ld EPS = 1e-8;
+const ld PI = 2 * acos(0.0);
 
 int main(void){
 std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
