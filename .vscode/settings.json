@@ -12,6 +12,7 @@
         "stdexcept": "cpp",
         "random": "cpp",
         "tuple": "cpp",
-        "utility": "cpp"
+        "utility": "cpp",
+        "ios": "cpp"
     }
 }
