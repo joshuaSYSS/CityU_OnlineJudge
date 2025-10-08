@@ -1,5 +1,5 @@
 # CityU CS ACM Programming Team Online Judge System Solutions
-In this repository, you will see solutions to problems on the CityU CS ACM Programming Team Online Judge System. Due to legal reasons, I do not encourage the action of plagiarism by copying and pasting this code.
+In this repository, you will see solutions to problems on the CityU CS ACM Programming Team Online Judge System.
 
 ## About me
 Joshua CHOI Kui Wang<br>
