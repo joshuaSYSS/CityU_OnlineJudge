@@ -1,5 +1,5 @@
 /*
-INCORRECT. SHOULD BE THE CASE WHEN THE LINE IS VERTICAL.
+INCORRECT.
 */
 
 #include <bits/stdc++.h>
@@ -45,7 +45,7 @@ typedef queue<pair<ll, ll>> qpll;
 const ld PHI = (1 + sqrt(5)) / 2;
 const ll Mod = 998244353ll;
 const ll Mod2 = 1000000007ll; //10^9 + 7
-const ld EPS = 1e-8;
+const ld EPS = 1e-5;
 const ld PI = 2 * acos(0.0);
 bool isClose(ld a, ld b, ld eps = EPS) {
     return fabsl(a - b) <= eps;
@@ -116,7 +116,7 @@ while (cin >> n) {
     }
     vector<vector<ld>> dp(n - 1, vector<ld>(2, INT_MAX));
     pair<pt, pt> ppt = solve(v[0], v[1]);
-    cout << ppt.first.x << ' ' << ppt.first.y << '\n';
+    //cout << ppt.first.x << ' ' << ppt.first.y << '\n';
     dp[0][0] = dist({ v[0].x, v[0].y }, ppt.first);
     dp[0][1] = dist({ v[0].x, v[0].y }, ppt.second);
     up(1, n - 1, 1) {
@@ -146,8 +146,8 @@ while (cin >> n) {
                     ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
                     ld c = ppt2.first.y - m * ppt2.first.x;
                     ld y = m * ppt.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y)) {
+                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                         continue;
                     }
                     else {
@@ -170,8 +170,8 @@ while (cin >> n) {
                     //Vertical line
                     //x = ppt2.first.x
                     ld y = m * ppt2.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y)) {
+                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                         continue;
                     }
                     else {
@@ -191,8 +191,8 @@ while (cin >> n) {
                     }
                     else {
                         ld x = (c2 - c) / (m - m2);
-                        if (min(ppt2.first.x, ppt2.second.x) <= x &&
-                            x <= max(ppt2.first.x, ppt2.second.x)) {
+                        if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
+                            x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
                             continue;
                         }
                         else {
@@ -232,8 +232,8 @@ while (cin >> n) {
                         ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
                         ld c = ppt2.first.y - m * ppt2.first.x;
                         ld y = m * ppt.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y)) {
+                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                             continue;
                         }
                         else {
@@ -256,8 +256,8 @@ while (cin >> n) {
                         //Vertical line
                         //x = ppt2.first.x
                         ld y = m * ppt2.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y)) {
+                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                             continue;
                         }
                         else {
@@ -277,8 +277,8 @@ while (cin >> n) {
                         }
                         else {
                             ld x = (c2 - c) / (m - m2);
-                            if (min(ppt2.first.x, ppt2.second.x) <= x &&
-                                x <= max(ppt2.first.x, ppt2.second.x)) {
+                            if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
+                                x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
                                 continue;
                             }
                             else {
@@ -315,8 +315,8 @@ while (cin >> n) {
                         ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
                         ld c = ppt2.first.y - m * ppt2.first.x;
                         ld y = m * ppt.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y)) {
+                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                             continue;
                         }
                         else {
@@ -339,8 +339,8 @@ while (cin >> n) {
                         //Vertical line
                         //x = ppt2.first.x
                         ld y = m * ppt2.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y)) {
+                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                             continue;
                         }
                         else {
@@ -360,8 +360,8 @@ while (cin >> n) {
                         }
                         else {
                             ld x = (c2 - c) / (m - m2);
-                            if (min(ppt2.first.x, ppt2.second.x) <= x &&
-                                x <= max(ppt2.first.x, ppt2.second.x)) {
+                            if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
+                                x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
                                 continue;
                             }
                             else {
@@ -402,8 +402,8 @@ while (cin >> n) {
                     ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
                     ld c = ppt2.first.y - m * ppt2.first.x;
                     ld y = m * ppt.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y)) {
+                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                         continue;
                     }
                     else {
@@ -426,8 +426,8 @@ while (cin >> n) {
                     //Vertical line
                     //x = ppt2.first.x
                     ld y = m * ppt2.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y)) {
+                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                         continue;
                     }
                     else {
@@ -447,8 +447,8 @@ while (cin >> n) {
                     }
                     else {
                         ld x = (c2 - c) / (m - m2);
-                        if (min(ppt2.first.x, ppt2.second.x) <= x &&
-                            x <= max(ppt2.first.x, ppt2.second.x)) {
+                        if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
+                            x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
                             continue;
                         }
                         else {
@@ -488,8 +488,8 @@ while (cin >> n) {
                         ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
                         ld c = ppt2.first.y - m * ppt2.first.x;
                         ld y = m * ppt.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y)) {
+                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                             continue;
                         }
                         else {
@@ -512,8 +512,8 @@ while (cin >> n) {
                         //Vertical line
                         //x = ppt2.first.x
                         ld y = m * ppt2.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y)) {
+                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                             continue;
                         }
                         else {
@@ -533,8 +533,8 @@ while (cin >> n) {
                         }
                         else {
                             ld x = (c2 - c) / (m - m2);
-                            if (min(ppt2.first.x, ppt2.second.x) <= x &&
-                                x <= max(ppt2.first.x, ppt2.second.x)) {
+                            if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
+                                x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
                                 continue;
                             }
                             else {
@@ -571,8 +571,8 @@ while (cin >> n) {
                         ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
                         ld c = ppt2.first.y - m * ppt2.first.x;
                         ld y = m * ppt.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y)) {
+                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                             continue;
                         }
                         else {
@@ -595,8 +595,8 @@ while (cin >> n) {
                         //Vertical line
                         //x = ppt2.first.x
                         ld y = m * ppt2.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y)) {
+                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                             continue;
                         }
                         else {
@@ -616,8 +616,8 @@ while (cin >> n) {
                         }
                         else {
                             ld x = (c2 - c) / (m - m2);
-                            if (min(ppt2.first.x, ppt2.second.x) <= x &&
-                                x <= max(ppt2.first.x, ppt2.second.x)) {
+                            if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
+                                x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
                                 continue;
                             }
                             else {
@@ -659,8 +659,8 @@ while (cin >> n) {
                 ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
                 ld c = ppt2.first.y - m * ppt2.first.x;
                 ld y = m * ppt.first.x + c;
-                if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                    y <= max(ppt2.first.y, ppt2.second.y)) {
+                if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                    y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                     continue;
                 }
                 else {
@@ -683,8 +683,8 @@ while (cin >> n) {
                 //Vertical line
                 //x = ppt2.first.x
                 ld y = m * ppt2.first.x + c;
-                if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                    y <= max(ppt2.first.y, ppt2.second.y)) {
+                if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                    y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                     continue;
                 }
                 else {
@@ -704,8 +704,8 @@ while (cin >> n) {
                 }
                 else {
                     ld x = (c2 - c) / (m - m2);
-                    if (min(ppt2.first.x, ppt2.second.x) <= x &&
-                        x <= max(ppt2.first.x, ppt2.second.x)) {
+                    if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
+                        x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
                         continue;
                     }
                     else {
@@ -745,8 +745,8 @@ while (cin >> n) {
                     ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
                     ld c = ppt2.first.y - m * ppt2.first.x;
                     ld y = m * ppt.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y)) {
+                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                         continue;
                     }
                     else {
@@ -769,8 +769,8 @@ while (cin >> n) {
                     //Vertical line
                     //x = ppt2.first.x
                     ld y = m * ppt2.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y)) {
+                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                         continue;
                     }
                     else {
@@ -790,8 +790,8 @@ while (cin >> n) {
                     }
                     else {
                         ld x = (c2 - c) / (m - m2);
-                        if (min(ppt2.first.x, ppt2.second.x) <= x &&
-                            x <= max(ppt2.first.x, ppt2.second.x)) {
+                        if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
+                            x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
                             continue;
                         }
                         else {
@@ -829,8 +829,8 @@ while (cin >> n) {
                     ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
                     ld c = ppt2.first.y - m * ppt2.first.x;
                     ld y = m * ppt.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y)) {
+                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                         continue;
                     }
                     else {
@@ -853,8 +853,8 @@ while (cin >> n) {
                     //Vertical line
                     //x = ppt2.first.x
                     ld y = m * ppt2.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y)) {
+                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
+                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
                         continue;
                     }
                     else {
@@ -874,8 +874,8 @@ while (cin >> n) {
                     }
                     else {
                         ld x = (c2 - c) / (m - m2);
-                        if (min(ppt2.first.x, ppt2.second.x) <= x &&
-                            x <= max(ppt2.first.x, ppt2.second.x)) {
+                        if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
+                            x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
                             continue;
                         }
                         else {
@@ -890,10 +890,10 @@ while (cin >> n) {
             }
         }
     }
-    cout << ":";
+    /*cout << ":";
     foreach(x, dp) {
         cout << x[0] << ' ' << x[1] << '\n';
-    }
+    }*/
     cout << fixed << setprecision(6);
     cout << res << '\n';
 }
