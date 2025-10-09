@@ -1,7 +1,3 @@
-/*
-INCORRECT.
-*/
-
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long; using ld = long double;
@@ -45,8 +41,9 @@ typedef queue<pair<ll, ll>> qpll;
 const ld PHI = (1 + sqrt(5)) / 2;
 const ll Mod = 998244353ll;
 const ll Mod2 = 1000000007ll; //10^9 + 7
-const ld EPS = 1e-5;
+const ld EPS = 1e-9;
 const ld PI = 2 * acos(0.0);
+const ld INF = 1e18;
 bool isClose(ld a, ld b, ld eps = EPS) {
     return fabsl(a - b) <= eps;
 }
@@ -57,845 +54,146 @@ struct circle {
 struct pt {
     ld x, y;
 };
+
+struct Info {
+    ll node_id;
+    ld sum_dist;
+    bool operator<(const Info& arg) const {
+        return sum_dist > arg.sum_dist;
+    }
+};
+
 pair<pt, pt> solve(circle ca, circle cb) {
-    ld a = -2 * ca.x;
-    ld b = -2 * ca.y;
-    ld c = ca.r * ca.r - ca.y * ca.y - ca.x * ca.x;
-
-    ld p = -2 * ca.x + 2 * cb.x;
-    ld q = -2 * ca.y + 2 * cb.y;
-    ld s = ca.r * ca.r - cb.r * cb.r - ca.x * ca.x + cb.x * cb.x - ca.y * ca.y + cb.y * cb.y;
-
-    pair<pt, pt> ppt;
-    if (q == 0) {
-        //x = s / p
-        ld A = 1;
-        ld B = b;
-        ld C = (s / p) * (s / p) + a * (s / p) - c;
-
-        ld D = B * B - 4 * A * C;
-        if (D < 0) {
-            ppt = { {INT_MAX, INT_MAX}, {INT_MAX, INT_MAX} };
-        }
-        else {
-            ld y1 = (-B + sqrtl(D)) / (2 * A);
-            ld y2 = (-B - sqrtl(D)) / (2 * A);
-            ppt = { {s / p, y1}, {s / p, y2}};
-        }
+    ld h1 = ca.x, k1 = ca.y, r1 = ca.r;
+    ld h2 = cb.x, k2 = cb.y, r2 = cb.r;
+    ld dx = h2 - h1;
+    ld dy = k2 - k1;
+    ld dd = sqrtl(dx * dx + dy * dy);
+    if (dd > r1 + r2 + EPS || fabsl(r1 - r2) > dd + EPS) {
+        return {{INF, INF}, {INF, INF}};
     }
-    else {
-        ld A = (p / q) * (p / q) + 1;
-        ld B = a - 2 * (p / q) * (s / q) - (b * p / q);
-        ld C = (s / q) * (s / q) + b * s / q - c;
-
-        ld D = B * B - 4 * A * C;
-        if (D < 0) {
-            ppt = { {INT_MAX, INT_MAX}, {INT_MAX, INT_MAX} };
-        }
-        else {
-            ld x1 = (-B + sqrtl(D)) / (2 * A);
-            ld y1 = (-p / q) * x1 + s / q;
-            ld x2 = (-B - sqrtl(D)) / (2 * A);
-            ld y2 = (-p / q) * x2 + s / q;
-            ppt = { {x1, y1}, {x2, y2} };
-        }
+    if (isClose(dd, 0) && isClose(r1, r2)) {
+        return {{INF, INF}, {INF, INF}};
     }
-    return ppt;
+    ld a = (r1 * r1 - r2 * r2 + dd * dd) / (2 * dd);
+    ld hh = sqrtl(r1 * r1 - a * a);
+    if (isnan(hh)) hh = 0;
+    ld px = h1 + a * (dx / dd);
+    ld py = k1 + a * (dy / dd);
+    pt p1 = {px + hh * (-dy / dd), py + hh * (dx / dd)};
+    pt p2 = {px - hh * (-dy / dd), py - hh * (dx / dd)};
+    return {p1, p2};
 }
 ld dist(pt a, pt b) {
     return sqrtl((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
 }
-int main(void){
-std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
-ll n; 
-while (cin >> n) {
-    if (n == 0) break;
-    vector<circle> v(n);
-    up(0, n, 1) {
-        cin >> v[i].x >> v[i].y >> v[i].r;
-    }
-    vector<vector<ld>> dp(n - 1, vector<ld>(2, INT_MAX));
-    pair<pt, pt> ppt = solve(v[0], v[1]);
-    //cout << ppt.first.x << ' ' << ppt.first.y << '\n';
-    dp[0][0] = dist({ v[0].x, v[0].y }, ppt.first);
-    dp[0][1] = dist({ v[0].x, v[0].y }, ppt.second);
-    up(1, n - 1, 1) {
-        ppt = solve(v[i], v[i + 1]);
 
-        //Consider first point
-
-        //Start center
-        if (isClose(ppt.first.x, v[0].x)) {
-            //Vertical line
-            //x = ppt.first.x
-            ll ok = 1;
-            up3(0, i, 1) {
-                pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                if (isClose(ppt2.first.x, ppt2.second.x)) {
-                    //Vertical line
-                    //x = ppt2.first.x
-                    if (isClose(ppt.first.x, ppt2.first.x)) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-                else {
-                    ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                    ld c = ppt2.first.y - m * ppt2.first.x;
-                    ld y = m * ppt.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-            }
-            if (ok) {
-                dp[i][0] = min(dp[i][0], dist(ppt.first, { v[0].x, v[0].y }));
-            }
-        }
-        else {
-            ld m = (ppt.first.y - v[0].y) / (ppt.first.x - v[0].x);
-            ld c = ppt.first.y - m * ppt.first.x;
-            ll ok = 1;
-            up3(0, i, 1) {
-                pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                if (isClose(ppt2.first.x, ppt2.second.x)) {
-                    //Vertical line
-                    //x = ppt2.first.x
-                    ld y = m * ppt2.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-                else {
-                    ld m2 = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                    ld c2 = ppt2.first.y - m2 * ppt2.first.x;
-                    //y = mx + c
-                    //y = m2x + c2
-                    //mx + c = m2x + c2
-                    //(m - m2)x = c2 - c
-                    if (isClose(m, m2)) {
-                        continue;
-                    }
-                    else {
-                        ld x = (c2 - c) / (m - m2);
-                        if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
-                            x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (ok) {
-                dp[i][0] = min(dp[i][0], dist(ppt.first, { v[0].x, v[0].y }));
-            }
-        }
-
-        //Start with other points
-        up2(0, i, 1) {
-            pair<pt, pt> ppt3 = solve(v[j], v[j + 1]);
-            //Consider first point
-            if (isClose(ppt.first.x, ppt3.first.x)) {
-                //Vertical line
-                //x = ppt.first.x
-                ll ok = 1;
-                up3(j, i, 1) {
-                    pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                    if (isClose(ppt2.first.x, ppt2.second.x)) {
-                        //Vertical line
-                        //x = ppt2.first.x
-                        if (isClose(ppt.first.x, ppt2.first.x)) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                    else {
-                        ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                        ld c = ppt2.first.y - m * ppt2.first.x;
-                        ld y = m * ppt.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                }
-                if (ok) {
-                    dp[i][0] = min(dp[i][0], dp[j][0] + dist(ppt.first, ppt3.first));
-                }
-            }
-            else {
-                ld m = (ppt.first.y - ppt3.first.y) / (ppt.first.x - ppt3.first.x);
-                ld c = ppt.first.y - m * ppt.first.x;
-                ll ok = 1;
-                up3(j, i, 1) {
-                    pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                    if (isClose(ppt2.first.x, ppt2.second.x)) {
-                        //Vertical line
-                        //x = ppt2.first.x
-                        ld y = m * ppt2.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                    else {
-                        ld m2 = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                        ld c2 = ppt2.first.y - m2 * ppt2.first.x;
-                        //y = mx + c
-                        //y = m2x + c2
-                        //mx + c = m2x + c2
-                        //(m - m2)x = c2 - c
-                        if (isClose(m, m2)) {
-                            continue;
-                        }
-                        else {
-                            ld x = (c2 - c) / (m - m2);
-                            if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
-                                x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
-                                continue;
-                            }
-                            else {
-                                ok = 0;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (ok) {
-                    dp[i][0] = min(dp[i][0], dp[j][0] + dist(ppt.first, ppt3.first));
-                }
-            }
-
-            //Consider second point
-            if (isClose(ppt.first.x, ppt3.second.x)) {
-                //Vertical line
-                //x = ppt.first.x
-                ll ok = 1;
-                up3(j, i, 1) {
-                    pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                    if (isClose(ppt2.first.x, ppt2.second.x)) {
-                        //Vertical line
-                        //x = ppt2.first.x
-                        if (isClose(ppt.first.x, ppt2.first.x)) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                    else {
-                        ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                        ld c = ppt2.first.y - m * ppt2.first.x;
-                        ld y = m * ppt.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                }
-                if (ok) {
-                    dp[i][0] = min(dp[i][0], dp[j][1] + dist(ppt.first, ppt3.second));
-                }
-            }
-            else {
-                ld m = (ppt.first.y - ppt3.second.y) / (ppt.first.x - ppt3.second.x);
-                ld c = ppt.first.y - m * ppt.first.x;
-                ll ok = 1;
-                up3(j, i, 1) {
-                    pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                    if (isClose(ppt2.first.x, ppt2.second.x)) {
-                        //Vertical line
-                        //x = ppt2.first.x
-                        ld y = m * ppt2.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                    else {
-                        ld m2 = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                        ld c2 = ppt2.first.y - m2 * ppt2.first.x;
-                        //y = mx + c
-                        //y = m2x + c2
-                        //mx + c = m2x + c2
-                        //(m - m2)x = c2 - c
-                        if (isClose(m, m2)) {
-                            continue;
-                        }
-                        else {
-                            ld x = (c2 - c) / (m - m2);
-                            if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
-                                x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
-                                continue;
-                            }
-                            else {
-                                ok = 0;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (ok) {
-                    dp[i][0] = min(dp[i][0], dp[j][1] + dist(ppt.first, ppt3.second));
-                }
-            }
-        }
-
-        //Consider second point
-        swap(ppt.first, ppt.second);
-
-        //Start center
-        if (isClose(ppt.first.x, v[0].x)) {
-            //Vertical line
-            //x = ppt.first.x
-            ll ok = 1;
-            up3(0, i, 1) {
-                pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                if (isClose(ppt2.first.x, ppt2.second.x)) {
-                    //Vertical line
-                    //x = ppt2.first.x
-                    if (isClose(ppt.first.x, ppt2.first.x)) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-                else {
-                    ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                    ld c = ppt2.first.y - m * ppt2.first.x;
-                    ld y = m * ppt.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-            }
-            if (ok) {
-                dp[i][1] = min(dp[i][1], dist(ppt.first, { v[0].x, v[0].y }));
-            }
-        }
-        else {
-            ld m = (ppt.first.y - v[0].y) / (ppt.first.x - v[0].x);
-            ld c = ppt.first.y - m * ppt.first.x;
-            ll ok = 1;
-            up3(0, i, 1) {
-                pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                if (isClose(ppt2.first.x, ppt2.second.x)) {
-                    //Vertical line
-                    //x = ppt2.first.x
-                    ld y = m * ppt2.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-                else {
-                    ld m2 = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                    ld c2 = ppt2.first.y - m2 * ppt2.first.x;
-                    //y = mx + c
-                    //y = m2x + c2
-                    //mx + c = m2x + c2
-                    //(m - m2)x = c2 - c
-                    if (isClose(m, m2)) {
-                        continue;
-                    }
-                    else {
-                        ld x = (c2 - c) / (m - m2);
-                        if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
-                            x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (ok) {
-                dp[i][1] = min(dp[i][1], dist(ppt.first, { v[0].x, v[0].y }));
-            }
-        }
-
-        //Start with other points
-        up2(0, i, 1) {
-            pair<pt, pt> ppt3 = solve(v[j], v[j + 1]);
-            //Consider first point
-            if (isClose(ppt.first.x, ppt3.first.x)) {
-                //Vertical line
-                //x = ppt.first.x
-                ll ok = 1;
-                up3(j, i, 1) {
-                    pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                    if (isClose(ppt2.first.x, ppt2.second.x)) {
-                        //Vertical line
-                        //x = ppt2.first.x
-                        if (isClose(ppt.first.x, ppt2.first.x)) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                    else {
-                        ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                        ld c = ppt2.first.y - m * ppt2.first.x;
-                        ld y = m * ppt.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                }
-                if (ok) {
-                    dp[i][1] = min(dp[i][1], dp[j][0] + dist(ppt.first, ppt3.first));
-                }
-            }
-            else {
-                ld m = (ppt.first.y - ppt3.first.y) / (ppt.first.x - ppt3.first.x);
-                ld c = ppt.first.y - m * ppt.first.x;
-                ll ok = 1;
-                up3(j, i, 1) {
-                    pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                    if (isClose(ppt2.first.x, ppt2.second.x)) {
-                        //Vertical line
-                        //x = ppt2.first.x
-                        ld y = m * ppt2.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                    else {
-                        ld m2 = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                        ld c2 = ppt2.first.y - m2 * ppt2.first.x;
-                        //y = mx + c
-                        //y = m2x + c2
-                        //mx + c = m2x + c2
-                        //(m - m2)x = c2 - c
-                        if (isClose(m, m2)) {
-                            continue;
-                        }
-                        else {
-                            ld x = (c2 - c) / (m - m2);
-                            if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
-                                x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
-                                continue;
-                            }
-                            else {
-                                ok = 0;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (ok) {
-                    dp[i][1] = min(dp[i][1], dp[j][0] + dist(ppt.first, ppt3.first));
-                }
-            }
-
-            //Consider second point
-            if (isClose(ppt.first.x, ppt3.second.x)) {
-                //Vertical line
-                //x = ppt.first.x
-                ll ok = 1;
-                up3(j, i, 1) {
-                    pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                    if (isClose(ppt2.first.x, ppt2.second.x)) {
-                        //Vertical line
-                        //x = ppt2.first.x
-                        if (isClose(ppt.first.x, ppt2.first.x)) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                    else {
-                        ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                        ld c = ppt2.first.y - m * ppt2.first.x;
-                        ld y = m * ppt.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                }
-                if (ok) {
-                    dp[i][1] = min(dp[i][1], dp[j][1] + dist(ppt.first, ppt3.second));
-                }
-            }
-            else {
-                ld m = (ppt.first.y - ppt3.second.y) / (ppt.first.x - ppt3.second.x);
-                ld c = ppt.first.y - m * ppt.first.x;
-                ll ok = 1;
-                up3(j, i, 1) {
-                    pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                    if (isClose(ppt2.first.x, ppt2.second.x)) {
-                        //Vertical line
-                        //x = ppt2.first.x
-                        ld y = m * ppt2.first.x + c;
-                        if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                            y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                    else {
-                        ld m2 = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                        ld c2 = ppt2.first.y - m2 * ppt2.first.x;
-                        //y = mx + c
-                        //y = m2x + c2
-                        //mx + c = m2x + c2
-                        //(m - m2)x = c2 - c
-                        if (isClose(m, m2)) {
-                            continue;
-                        }
-                        else {
-                            ld x = (c2 - c) / (m - m2);
-                            if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
-                                x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
-                                continue;
-                            }
-                            else {
-                                ok = 0;
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (ok) {
-                    dp[i][1] = min(dp[i][1], dp[j][1] + dist(ppt.first, ppt3.second));
-                }
-            }
-        }
-    }
-
-    ld res = INT_MAX;
-    ppt.first = { v[n - 1].x, v[n - 1].y };
-
-    //Consider first point center
-    if (isClose(ppt.first.x, v[0].x)) {
-        //Vertical line
-        //x = ppt.first.x
-        ll ok = 1;
-        up3(0, n - 1, 1) {
-            pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-            if (isClose(ppt2.first.x, ppt2.second.x)) {
-                //Vertical line
-                //x = ppt2.first.x
-                if (isClose(ppt.first.x, ppt2.first.x)) {
-                    continue;
-                }
-                else {
-                    ok = 0;
-                    break;
-                }
-            }
-            else {
-                ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                ld c = ppt2.first.y - m * ppt2.first.x;
-                ld y = m * ppt.first.x + c;
-                if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                    y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                    continue;
-                }
-                else {
-                    ok = 0;
-                    break;
-                }
-            }
-        }
-        if (ok) {
-            res = min(res, dist(ppt.first, { v[0].x, v[0].y }));
-        }
-    }
-    else {
-        ld m = (ppt.first.y - v[0].y) / (ppt.first.x - v[0].x);
-        ld c = ppt.first.y - m * ppt.first.x;
-        ll ok = 1;
-        up3(0, n - 1, 1) {
-            pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-            if (isClose(ppt2.first.x, ppt2.second.x)) {
-                //Vertical line
-                //x = ppt2.first.x
-                ld y = m * ppt2.first.x + c;
-                if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                    y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                    continue;
-                }
-                else {
-                    ok = 0;
-                    break;
-                }
-            }
-            else {
-                ld m2 = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                ld c2 = ppt2.first.y - m2 * ppt2.first.x;
-                //y = mx + c
-                //y = m2x + c2
-                //mx + c = m2x + c2
-                //(m - m2)x = c2 - c
-                if (isClose(m, m2)) {
-                    continue;
-                }
-                else {
-                    ld x = (c2 - c) / (m - m2);
-                    if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
-                        x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-            }
-        }
-        if (ok) {
-            res = min(res, dist(ppt.first, { v[0].x, v[0].y }));
-        }
-    }
-
-    //Start with other points
-    up2(0, n - 1, 1) {
-        pair<pt, pt> ppt3 = solve(v[j], v[j + 1]);
-        //Consider first point
-        if (isClose(ppt.first.x, ppt3.first.x)) {
-            //Vertical line
-            //x = ppt.first.x
-            ll ok = 1;
-            up3(j, n - 1, 1) {
-                pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                if (isClose(ppt2.first.x, ppt2.second.x)) {
-                    //Vertical line
-                    //x = ppt2.first.x
-                    if (isClose(ppt.first.x, ppt2.first.x)) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-                else {
-                    ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                    ld c = ppt2.first.y - m * ppt2.first.x;
-                    ld y = m * ppt.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-            }
-            if (ok) {
-                res = min(res, dp[j][0] + dist(ppt.first, ppt3.first));
-            }
-        }
-        else {
-            ld m = (ppt.first.y - ppt3.first.y) / (ppt.first.x - ppt3.first.x);
-            ld c = ppt.first.y - m * ppt.first.x;
-            ll ok = 1;
-            up3(j, n - 1, 1) {
-                pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                if (isClose(ppt2.first.x, ppt2.second.x)) {
-                    //Vertical line
-                    //x = ppt2.first.x
-                    ld y = m * ppt2.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-                else {
-                    ld m2 = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                    ld c2 = ppt2.first.y - m2 * ppt2.first.x;
-                    //y = mx + c
-                    //y = m2x + c2
-                    //mx + c = m2x + c2
-                    //(m - m2)x = c2 - c
-                    if (isClose(m, m2)) {
-                        continue;
-                    }
-                    else {
-                        ld x = (c2 - c) / (m - m2);
-                        if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
-                            x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
-                            continue;
-                        }
-                        else {
-                            //cout << j << ' ' << x << '\n';
-                            ok = 0;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (ok) {
-                res = min(res, dp[j][0] + dist(ppt.first, ppt3.first));
-            }
-        }
-
-        //Consider second point
-        if (isClose(ppt.first.x, ppt3.second.x)) {
-            //Vertical line
-            //x = ppt.first.x
-            ll ok = 1;
-            up3(j, n - 1, 1) {
-                pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                if (isClose(ppt2.first.x, ppt2.second.x)) {
-                    //Vertical line
-                    //x = ppt2.first.x
-                    if (isClose(ppt.first.x, ppt2.first.x)) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-                else {
-                    ld m = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                    ld c = ppt2.first.y - m * ppt2.first.x;
-                    ld y = m * ppt.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-            }
-            if (ok) {
-                res = min(res, dp[j][1] + dist(ppt.first, ppt3.second));
-            }
-        }
-        else {
-            ld m = (ppt.first.y - ppt3.second.y) / (ppt.first.x - ppt3.second.x);
-            ld c = ppt.first.y - m * ppt.first.x;
-            ll ok = 1;
-            up3(j, n - 1, 1) {
-                pair<pt, pt> ppt2 = solve(v[k], v[k + 1]);
-                if (isClose(ppt2.first.x, ppt2.second.x)) {
-                    //Vertical line
-                    //x = ppt2.first.x
-                    ld y = m * ppt2.first.x + c;
-                    if (min(ppt2.first.y, ppt2.second.y) - EPS <= y &&
-                        y <= max(ppt2.first.y, ppt2.second.y) + EPS) {
-                        continue;
-                    }
-                    else {
-                        ok = 0;
-                        break;
-                    }
-                }
-                else {
-                    ld m2 = (ppt2.first.y - ppt2.second.y) / (ppt2.first.x - ppt2.second.x);
-                    ld c2 = ppt2.first.y - m2 * ppt2.first.x;
-                    //y = mx + c
-                    //y = m2x + c2
-                    //mx + c = m2x + c2
-                    //(m - m2)x = c2 - c
-                    if (isClose(m, m2)) {
-                        continue;
-                    }
-                    else {
-                        ld x = (c2 - c) / (m - m2);
-                        if (min(ppt2.first.x, ppt2.second.x) - EPS <= x &&
-                            x <= max(ppt2.first.x, ppt2.second.x) + EPS) {
-                            continue;
-                        }
-                        else {
-                            ok = 0;
-                            break;
-                        }
-                    }
-                }
-            }
-            if (ok) {
-                res = min(res, dp[j][1] + dist(ppt.first, ppt3.second));
-            }
-        }
-    }
-    /*cout << ":";
-    foreach(x, dp) {
-        cout << x[0] << ' ' << x[1] << '\n';
-    }*/
-    cout << fixed << setprecision(6);
-    cout << res << '\n';
+ll ccw(pt a, pt b, pt c) {
+    ld gaiseki = (b.x - a.x) * (c.y - a.y) - (c.x - a.x) * (b.y - a.y);
+    if (gaiseki > EPS) return 1;
+    if (gaiseki < -EPS) return -1;
+    ld naiseki = (c.x - a.x) * (b.x - a.x) + (c.y - a.y) * (b.y - a.y);
+    if (naiseki < -EPS) return 2;
+    ld norm1 = dist(a, b);
+    ld norm2 = dist(a, c);
+    if (norm1 + EPS < norm2) return -2;
+    return 0;
 }
-return 0;
+
+int main(void) {
+    std::ios::sync_with_stdio(false); std::cin.tie(NULL); std::cout.tie(NULL);
+    ll n;
+    while (cin >> n) {
+        if (n == 0) break;
+        vector<circle> v(n);
+        up(0, n, 1) {
+            cin >> v[i].x >> v[i].y >> v[i].r;
+        }
+        vector<pt> points;
+        points.push_back({v[0].x, v[0].y});
+        up(0, n - 1, 1) {
+            pair<pt, pt> res = solve(v[i], v[i + 1]);
+            points.push_back(res.first);
+            points.push_back(res.second);
+            points.push_back({v[i + 1].x, v[i + 1].y});
+        }
+        ll num = points.size();
+        ll start = 0;
+        ll goal = num - 1;
+        vector<vl> G(num);
+        vector<vd> Dist(num, vd(num));
+        up(0, num, 1) {
+            up2(0, num, 1) {
+                Dist[i][j] = dist(points[i], points[j]);
+            }
+        }
+        bool FLG;
+        ll first_up, last_up;
+        up(0, num - 1, 1) {
+            switch (i % 3) {
+            case 0:
+                first_up = i + 1;
+                break;
+            case 1:
+                first_up = i + 3;
+                break;
+            case 2:
+                first_up = i + 2;
+                break;
+            }
+            up2(i + 1, num, 1) {
+                FLG = true;
+                switch (j % 3) {
+                case 0:
+                    last_up = j - 2;
+                    break;
+                case 1:
+                    last_up = j - 3;
+                    break;
+                case 2:
+                    last_up = j - 4;
+                    break;
+                }
+                if (last_up < first_up) {
+                    G[i].push_back(j);
+                    continue;
+                }
+                up3(first_up, last_up + 1, 3) {
+                    ll prod1 = ccw(points[i], points[j], points[k]) * ccw(points[i], points[j], points[k + 1]);
+                    ll prod2 = ccw(points[k], points[k + 1], points[i]) * ccw(points[k], points[k + 1], points[j]);
+                    if (prod1 > 0 || prod2 > 0) {
+                        FLG = false;
+                        break;
+                    }
+                }
+                if (FLG) {
+                    G[i].push_back(j);
+                }
+            }
+        }
+        vd min_dist(num, INF);
+        priority_queue<Info> Q;
+        min_dist[start] = 0;
+        Q.push({start, 0});
+        while (!Q.empty()) {
+            Info cur = Q.top();
+            if (cur.sum_dist > min_dist[cur.node_id]) {
+                Q.pop();
+                continue;
+            }
+            Q.pop();
+            if (cur.node_id == goal) {
+                cout << fixed << setprecision(6) << cur.sum_dist << '\n';
+                break;
+            }
+            foreach(to, G[cur.node_id]) {
+                ld nextd = cur.sum_dist + Dist[cur.node_id][to];
+                if (nextd < min_dist[to]) {
+                    min_dist[to] = nextd;
+                    Q.push({to, nextd});
+                }
+            }
+        }
+    }
+    return 0;
 }
