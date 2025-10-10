@@ -13,6 +13,7 @@
         "random": "cpp",
         "tuple": "cpp",
         "utility": "cpp",
-        "ios": "cpp"
+        "ios": "cpp",
+        "cmath": "cpp"
     }
 }

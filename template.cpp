@@ -44,6 +44,15 @@ const ll Mod2 = 1000000007ll; //10^9 + 7
 const ld EPS = 1e-8;
 const ld PI = 2 * acos(0.0);
 
+ll gcd(ll a, ll b) {
+    while (b)
+        b ^= a ^= b ^= a %= b;
+    return a;
+}
+ll lcm(ll a, ll b) {
+    return abs(a * b) / gcd(a, b);
+}
+
 int main(void){
 std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
 
