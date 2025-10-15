@@ -1,6 +1,3 @@
-/*
-TO-DO
-*/
 #include <bits/stdc++.h>
 using namespace std;
 using ll = long long; using ld = long double;
@@ -59,31 +56,31 @@ ll lcm(ll a, ll b) {
 int main(void){
     std::ios::sync_with_stdio(EXIT_SUCCESS); std::cin.tie(EXIT_SUCCESS); std::cout.tie(EXIT_SUCCESS);
     ld a;
-    const ld PI = acos(0) * 2;
-    while (cin >> a) {
-        ld sq = a * a;
-        ld b = PI * a * a / 4.0;
-        ld c = b + b - sq;
-        ld y = a / 2.0;
-        ld x = sqrtl(a * a - y * y);
-        ld alpha = atan(x / y);
-        ld section = PI * a * a * alpha / (2 * PI);
-        ld area = section * 2 - (1 / 2) * sin(alpha) * a * a;   
-        cout << area << ' ' << 0.003 + 0.005 / 2.0 + 0.002 / 4 << '\n';
-        ld black = (area - c) * 4;
-        ld d = sq - b - black / 2.0;
-        ld e = c - d - d;
+const ld PI = acos(0) * 2;
+while (cin >> a) {
+    ld sq = a * a;
+    ld b = PI * a * a / 4.0;
+    ld c = b + b - sq;
+    ld y = a / 2.0;
+    ld x = sqrtl(a * a - y * y);
+    ld alpha = 60.0 / 360.0 * 2 * PI;
+    ld section = PI * a * a * alpha / (2 * PI);
+    ld area = section * 2 - (1.0 / 2.0) * sin(alpha) * a * a;
+    //cout << area << ' ' << 0.003 + 0.005 / 2.0 + 0.002 / 4 << '\n';
+    ld black = (area - c) * 4;
+    ld d = sq - b - black / 2.0;
+    ld e = c - d - d;
 
-        //x^2 + y^2 = a^2
-        //when y = a / 2
-        //x^2 = a^2 - (a/2)^2
-        //tan(alpha) = y / x
-        //area = section * 2 - (1/2)sin(alpha)*a*a
-        //(area - c) * 4 = black
-        cout << fixed << setprecision(3);
-        cout << e << ' ' <<
-            d * 4 << ' ' <<
-            black << '\n';
-    }
+    //x^2 + y^2 = a^2
+    //when y = a / 2
+    //x^2 = a^2 - (a/2)^2
+    //tan(alpha) = y / x
+    //area = section * 2 - (1/2)sin(alpha)*a*a
+    //(area - c) * 4 = black
+    cout << fixed << setprecision(3);
+    cout << e << ' ' <<
+        d * 4 << ' ' <<
+        black << '\n';
+}
     return 0;
 }
